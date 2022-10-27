@@ -2,6 +2,7 @@ import React from "react";
 import { Badge, Box, Image, SimpleGrid, Text, Flex } from "@chakra-ui/core";
 import { format as timeAgo } from "timeago.js";
 import { Link } from "react-router-dom";
+import { Heart } from "react-feather";
 
 import { useSpaceXPaginated } from "../utils/use-space-x";
 import { formatDate } from "../utils/format-date";
@@ -46,11 +47,15 @@ export default function Launches() {
 }
 
 export function LaunchItem({ launch }) {
-  const [,{addLaunch}] = useFavorites()
-  
+  const [{ launches }, { addLaunch, removeLaunch }] = useFavorites();
+
   function handleAddFavorite(event) {
-    event.preventDefault()
-    addLaunch(launch)
+    event.preventDefault();
+    addLaunch(launch);
+  }
+  function handleRemoveFavorite(event) {
+    event.preventDefault();
+    removeLaunch(launch.flight_number);
   }
   return (
     <Box
@@ -85,7 +90,6 @@ export function LaunchItem({ launch }) {
       />
 
       <Box p="6">
-        
         <Box d="flex" alignItems="baseline">
           {launch.launch_success ? (
             <Badge px="2" variant="solid" variantColor="green">
@@ -107,7 +111,17 @@ export function LaunchItem({ launch }) {
             {launch.rocket.rocket_name} &bull; {launch.launch_site.site_name}
           </Box>
           <Box marginLeft="auto">
-            <button onClick={handleAddFavorite}>Favorite</button>
+            {launches.has(launch.flight_number) ? (
+              <Heart
+                stroke="transparent"
+                fill="#FF0000"
+                onClick={handleRemoveFavorite}
+              >
+                Remove to Favorite
+              </Heart>
+            ) : (
+              <Heart onClick={handleAddFavorite}>Add to Favorite</Heart>
+            )}
           </Box>
         </Box>
 

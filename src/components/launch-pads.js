@@ -6,6 +6,8 @@ import Error from "./error";
 import Breadcrumbs from "./breadcrumbs";
 import LoadMoreButton from "./load-more-button";
 import { useSpaceXPaginated } from "../utils/use-space-x";
+import { useFavorites } from "../context/favorite";
+import { Heart } from "react-feather";
 
 const PAGE_SIZE = 12;
 
@@ -41,7 +43,19 @@ export default function LaunchPads() {
   );
 }
 
-function LaunchPadItem({ launchPad }) {
+export function LaunchPadItem({ launchPad }) {
+  const [{ pads }, { addPad, removePad }] = useFavorites();
+
+  function handleAddFavorite(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    addPad(launchPad);
+  }
+  function handleRemoveFavorite(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    removePad(launchPad.site_id);
+  }
   return (
     <Box
       as={Link}
@@ -88,6 +102,19 @@ function LaunchPadItem({ launchPad }) {
         <Text color="gray.500" fontSize="sm">
           {launchPad.vehicles_launched.join(", ")}
         </Text>
+        <Box marginLeft="auto">
+          {pads.has(launchPad.site_id) ? (
+            <Heart
+              stroke="transparent"
+              fill="#FF0000"
+              onClick={handleRemoveFavorite}
+            >
+              Remove to Favorite
+            </Heart>
+          ) : (
+            <Heart onClick={handleAddFavorite}>Add to Favorite</Heart>
+          )}
+        </Box>
       </Box>
     </Box>
   );

@@ -12,10 +12,20 @@ function FavoriteProvider({ children }) {
     setLauches(draft)
   }
   function handleAddPad(pad) {
-    setPads((pads) => pads.concat(pad));
+    const draft = structuredClone(pads)
+    draft.set(pad.site_id, pad)
+    setPads(draft)
   }
-  function handleDeleteLaunch(id) {}
-  function handleDeletePad(id) {}
+  function handleDeleteLaunch(id) {
+    const draft = structuredClone(launches)
+    draft.delete(id)
+    setLauches(draft)
+  }
+  function handleDeletePad(id) {
+    const draft = structuredClone(pads)
+    draft.delete(id)
+    setPads(draft)
+  }
   const state = {
     launches,
     pads,
