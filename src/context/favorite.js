@@ -1,4 +1,4 @@
-import React,{ createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 const FavoriteContext = createContext();
 
@@ -8,11 +8,11 @@ function FavoriteProvider({ children }) {
 
   function handleAddLaunch(launch) {
     const draft = structuredClone(launches)
-    draft.set(launch.flight_number,launch)
+    draft.set(launch.flight_number, launch)
     setLauches(draft)
   }
   function handleAddPad(pad) {
-    setPads(pads => pads.concat(pad));
+    setPads((pads) => pads.concat(pad));
   }
   function handleDeleteLaunch(id) {}
   function handleDeletePad(id) {}
